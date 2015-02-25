@@ -17,12 +17,12 @@ public class Recipe extends Item {
 		return instructions;
 	}
 	
-	public void setIngredients()
+	public void setIngredients(ArrayList<Item> ingredients)
 	{
 		this.ingredients = ingredients;
 	}
 	
-	public ArrayList<Item> getIngredients(ArrayList<Item> ingredients)
+	public ArrayList<Item> getIngredients()
 	{
 		return ingredients;
 	}

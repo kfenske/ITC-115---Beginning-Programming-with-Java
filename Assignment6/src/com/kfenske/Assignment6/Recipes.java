@@ -12,9 +12,9 @@ public class Recipes implements ManageItems{
 	}
 	
 	@Override
-	public void add(Recipe i)
+	public void add(Recipe r)
 	{
-		recipes.add(i);
+		recipes.add(r);
 	}
 	
 	@Override

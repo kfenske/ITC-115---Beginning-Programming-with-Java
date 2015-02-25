@@ -28,11 +28,16 @@ public class RecipeForm {
 	private JPanel ingredientsPanel;
 	private JTextArea txtIngr;
 	private JPanel instructionsPanel;
+	private JTextArea txtQuant;
+	private JPanel quantityPanel;
 	private JTextArea txtInstr;
 	private JPanel buttonPanel;
 	private JButton addRecipe;
 	private JButton exitButton;
+	private JButton viewRecipes;
 	private Recipes meal;
+
+	Recipes recipes = new Recipes();
 	
 	public RecipeForm()
 	{
@@ -43,7 +48,7 @@ public class RecipeForm {
 	public void createFrame()
 	{
 		frame = new JFrame();
-		frame.setBounds(100, 100, 700, 400);
+		frame.setBounds(100, 100, 800, 400);
 		frame.add(createBorderPanel());
 		frame.setVisible(true);
 	}
@@ -51,8 +56,14 @@ public class RecipeForm {
 	private JPanel createBorderPanel() {
 		borderPanel = new JPanel();
 		borderPanel.setLayout(new BorderLayout());
+		/*borderPanel.add(createRecipeTitle());
+		borderPanel.add(createQuantityPanel());
+		borderPanel.add(createIngredientsPanel());
+		borderPanel.add(createInstructionsPanel());
+		borderPanel.add(createButtonPanel());*/
 		borderPanel.add(createRecipeTitle(), BorderLayout.NORTH);
-		borderPanel.add(createIngredientsPanel(), BorderLayout.WEST);
+		borderPanel.add(createQuantityPanel(), BorderLayout.WEST);
+		borderPanel.add(createIngredientsPanel(), BorderLayout.CENTER);
 		borderPanel.add(createInstructionsPanel(), BorderLayout.EAST);
 		borderPanel.add(createButtonPanel(), BorderLayout.SOUTH);
 		return borderPanel;
@@ -76,9 +87,12 @@ public class RecipeForm {
 		addRecipe.addActionListener(new AddRecipeListener());
 		exitButton = new JButton("Exit");
 		exitButton.addActionListener(new ExitListener());
+		viewRecipes = new JButton("View recipes");
+		viewRecipes.addActionListener(new ViewRecipesListener());
 		
 		buttonPanel.add(addRecipe);
 		buttonPanel.add(exitButton);
+		buttonPanel.add(viewRecipes);
 		  
 		return buttonPanel;
 	}
@@ -87,14 +101,28 @@ public class RecipeForm {
 		instructionsPanel = new JPanel();
 		instructionsPanel.setBounds(20, 20, 100, 200);
 		txtInstr = new JTextArea("Instructions: \n", 30, 30);
+		txtInstr.setLineWrap(true);
+		txtInstr.setWrapStyleWord(true);
 		instructionsPanel.add(txtInstr);
 		return instructionsPanel;
+	}
+	
+	private JPanel createQuantityPanel() {
+		quantityPanel  = new JPanel();
+		quantityPanel.setBounds(20, 20, 100, 200);
+		txtQuant = new JTextArea("Quantities: \n", 30, 7);
+		txtQuant.setLineWrap(true);
+		txtQuant.setWrapStyleWord(true);
+		quantityPanel.add(txtQuant);
+		return quantityPanel;
 	}
 
 	private JPanel createIngredientsPanel() {
 		ingredientsPanel = new JPanel();
 		ingredientsPanel.setBounds(20, 20, 100, 200);
 		txtIngr = new JTextArea("Ingredients: \n", 30, 30);
+		txtIngr.setLineWrap(true);
+		txtIngr.setWrapStyleWord(true);
 		ingredientsPanel.add(txtIngr);
 		return ingredientsPanel;
 	}
@@ -105,12 +133,34 @@ public class RecipeForm {
 		public void actionPerformed(ActionEvent arg0) {			
 			Recipe r = new Recipe();
 			r.setName(recipeName.getText());
-			ArrayList<Item> parts = new ArrayList<Item>(Arrays.<Item>asList(new Recipe(), (txtIngr.getText().split("\n"))));
 			r.setInstructions(txtInstr.getText());
 			
+			ArrayList<String> parts = new ArrayList<>(Arrays.asList(txtIngr.getText().substring(12).split("\n")));
+			ArrayList<String> quants = new ArrayList<>(Arrays.asList(txtQuant.getText().substring(12).split("\n")));
+			
+			ArrayList<Item> recipeIngr = new ArrayList<Item>();
+			for (int i = 0; i < parts.size(); i++)
+			{
+				Ingredient ingr = new Ingredient();
+				ingr.setName(parts.get(i));
+				ingr.setUnitSize(quants.get(i));
+				recipeIngr.add(ingr);
+			}
+			r.setIngredients(recipeIngr);
+			
 			recipeName.setText("");
-			txtIngr.setText("");
-			txtInstr.setText("");
+			txtQuant.setText("Quantities: \n");
+			txtIngr.setText("Ingredients \n");
+			txtInstr.setText("Instructions \n");
+
+		}
+	}
+	
+	private class ViewRecipesListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			RecipeDisplay display = new RecipeDisplay(recipes);
 		}
 	}
 	
