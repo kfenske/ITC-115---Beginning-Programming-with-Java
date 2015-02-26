@@ -16,28 +16,4 @@ public class Recipes implements ManageItems{
 	{
 		recipes.add(r);
 	}
-	
-	@Override
-	public void edit(Recipe r)
-	{
-		for (Recipe re : recipes)
-		{
-			if(re.getName() == r.getName())
-			{
-				re = r;
-			}
-		}
-	}
-	
-	@Override
-	public void remove(Recipe r)
-	{
-		for (Recipe re : recipes)
-		{
-			if(re.getName() == r.getName())
-			{
-				re = r;
-			}
-		}
-	}
 }
